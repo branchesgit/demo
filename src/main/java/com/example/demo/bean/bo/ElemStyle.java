@@ -1,29 +1,29 @@
 package com.example.demo.bean.bo;
 
 public class ElemStyle {
-    private Double w;
+    private Float w;
 
-    private Double h;
+    private Float h;
 
     private String border;
 
-    private String bkcolor;
+    private String backgroundColor;
 
     private Font font;
 
-    public Double getW() {
+    public Float getW() {
         return w;
     }
 
-    public void setW(Double w) {
+    public void setW(Float w) {
         this.w = w;
     }
 
-    public Double getH() {
+    public Float getH() {
         return h;
     }
 
-    public void setH(Double h) {
+    public void setH(Float h) {
         this.h = h;
     }
 
@@ -35,12 +35,12 @@ public class ElemStyle {
         this.border = border;
     }
 
-    public String getBkcolor() {
-        return bkcolor;
+    public String getBackgroundColor() {
+        return backgroundColor;
     }
 
-    public void setBkcolor(String bkcolor) {
-        this.bkcolor = bkcolor;
+    public void setBackgroundColor(String backgroundColor) {
+        this.backgroundColor = backgroundColor;
     }
 
     public Font getFont() {
@@ -49,5 +49,35 @@ public class ElemStyle {
 
     public void setFont(Font font) {
         this.font = font;
+    }
+
+    public String handleRgb() {
+        String color = this.getBackgroundColor();
+
+        if (color == null) {
+            return "0xffffff";
+        } else {
+
+            if (color.indexOf("rgba") > -1) {
+                System.out.println(this);
+                return "0xffffff";
+            } else {
+                color = color.replace("rgb(", "").replace(")", "");
+                String[] ary = color.split(",");
+                StringBuilder backgroundColor = new StringBuilder("0x");
+
+                for (int i = 0; i < ary.length; i++) {
+                    backgroundColor.append(Integer.toHexString(Integer.parseInt(ary[i].trim())));
+                }
+
+                return backgroundColor.toString();
+            }
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "backgroundColor: " + this.backgroundColor + ", " +
+                "height: " + this.h + ", width: " + this.w;
     }
 }

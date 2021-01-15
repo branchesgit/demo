@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -29,16 +28,16 @@ public class OfficeExcelImpl implements OfficeExcel {
         List<Table> tables = excelParam.getTables();
         String fileName = excelParam.getFileName();
         String author = "test";
-        String relativePath = "/home/branches/exdemo/excel_download/" + author + "/" + System.currentTimeMillis() + "/";
-
-        File fileDir = new File(relativePath);
-
-        if (!fileDir.mkdirs()) {
-            throw new Exception("创建路径失败");
-        }
-
+        String relativePath = "/home/branches/exdemo/excel_download/test/";
         String fileFullName = fileName + ".xlsx";
+
         File file = new File(relativePath, fileFullName);
+
+        if (file.exists()) {
+            if (!file.delete()) {
+                throw new Exception("删除文件失败");
+            }
+        }
 
         if (!file.createNewFile()) {
             throw new Exception("创建文件失败");
@@ -48,12 +47,13 @@ public class OfficeExcelImpl implements OfficeExcel {
 
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet("sheetName1");
-        Sheet.writeSheet(sheet, tables);
+        Sheet.getInstance().writeSheet(sheet, tables, workbook);
         workbook.write(out);
+
         out.flush();
         out.close();
 
-        return "test...";
+        return relativePath + fileFullName;
     }
 
 }
